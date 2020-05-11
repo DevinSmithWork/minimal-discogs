@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Minimal Discogs</title>
+    <meta name="description" content="Exp.">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!--CSS-->
+    <link rel="stylesheet" type="text/css" href="discogs.css">
+
+    <!--Jquery-->
+    <script src="https://code.jquery.com/jquery-3.5.0.min.js"></script>
+
+    <!--JS-->
+    <script src="discogs.js"></script>
+
+    <!-- Demo data stored locally for testing (Disabled) -->
+    <!-- <script src="demo3.json"></script> -->
+
+    <!--Open Graph card-->
+    <meta property="og:title" content="Minimal Discogs">
+    <meta property="og:description" content="A visually-oriented search tool with the Discogs.com API">
+    <meta property="og:image" content="http://devinsmith.work/projects/discogs/tcard.jpg">
+    <meta property="og:url" content="http://devinsmith.work/projects/discogs">
+
+    <!--Twitter card-->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="http://devinsmith.work/projects/discogs">
+    <meta name="twitter:creator" content="@devinsmithwork">
+    <meta name="twitter:title" content="Minimal Discogs">
+    <meta name="twitter:description" content="A visually-oriented search tool with the Discogs API">
+    <meta name="twitter:image" content="http://devinsmith.work/projects/discogs/tcard.jpg">
+
+    <style>
+         body {
+            background:black;
+            color:#eee;
+            font-family: 'Andale Mono', 'Roboto Mono', monospace;
+            font-weight:300;
+            font-size:large;
+            padding-top:0;
+            margin-top:0;
+        }
+    </style>
+
+</head>
+
+
+
+<body>
+    <div id="aboutDiv">
+        <div id="aboutTextContainer">
+            <button class="releaseBtn" id="closeAbout" onClick="$('#aboutDiv').fadeToggle(80)">X</button>
+            <h2>About</h2>
+            <p>Minimal Discogs was made by <a href="http://devinsmith.work">Devin Smith</a> in April of 2020, using the <a href="https://www.discogs.com/developers">Discogs.com API</a>.</p>
+            <br><br>
+            <h2>Key Commands</h2>
+            <h3>Main Screen</h3>
+            <ul>
+                <li><span class="pink">TAB</span> to focus input fields and buttons, <span class="pink">ENTER / RETURN</span> to trigger.</li>
+                <li><span class="pink">X</span> : ("Execute") Run search.</li>
+                <li><span class="pink">+ / -</span> : Increment/Decrement year &amp; run search.</li>
+                <li><span class="pink">M</span> : ("More") Get more releases (if there are more to get).</li>
+            </ul>
+
+            <h3>Release Screen</h3>
+                <ul>
+                    <li><span class="pink">ESCAPE</span> : Close window</li>
+                    <li><span class="pink">LEFT / RIGHT ARROW</span> : View Prev/Next release</li>
+                </ul>
+            </ul>
+
+            <h3>About Screen</h3>
+            <ul>
+                <li><span class="pink">ESCAPE</span> : Close window</li>
+            </ul>
+        </div>
+    </div>
+
+    <div id="searchDiv">
+        <div>
+
+        <span class="noBreak">
+            STYLE:
+            <select id="searchStyle" value="New Age" tabindex="0">
+                <option value='Aboriginal'>Aboriginal (Folk, World & Country)</option>
+                <option value='Abstract'>Abstract (Electronic)</option>
+                <option value='Acid'>Acid (Electronic)</option>
+                <option value='Acid House'>Acid House (Electronic)</option>
+                <option value='Acid Jazz'>Acid Jazz (Electronic)</option>
+                <option value='Acid Rock'>Acid Rock (Rock)</option>
+                <option value='Acoustic'>Acoustic (Rock)</option>
+                <option value='African'>African (Folk, World & Country)</option>
+                <option value='Afro-Cuban'>Afro-Cuban (Latin)</option>
+                <option value='Afro-Cuban Jazz'>Afro-Cuban Jazz (Jazz)</option>
+                <option value='Afrobeat'>Afrobeat (Funk/Soul)</option>
+                <option value='Afrobeat'>Afrobeat (Jazz)</option>
+                <option value='Alternative Rock'>Alternative Rock (Rock)</option>
+                <option value='Ambient'>Ambient (Electronic)</option>
+                <option value='Andalusian Classical'>Andalusian Classical (Folk, World & Country)</option>
+                <option value='AOR'>AOR (Rock)</option>
+                <option value='Appalachian Music'>Appalachian Music (Folk, World & Country)</option>
+                <option value='Arena Rock'>Arena Rock (Rock)</option>
+                <option value='Art Rock'>Art Rock (Rock)</option>
+                <option value='Atmospheric Black Metal'>Atmospheric Black Metal (Rock)</option>
+                <option value='Audiobook'>Audiobook (Non-Music)</option>
+                <option value='Avant-garde Jazz'>Avant-garde Jazz (Jazz)</option>
+                <option value='Avantgarde'>Avantgarde (Rock)</option>
+                <option value='Axé'>Axé (Latin)</option>
+                <option value='Azonto'>Azonto (Reggae)</option>
+                <option value='Bachata'>Bachata (Latin)</option>
+                <option value='Baião'>Baião (Latin)</option>
+                <option value='Ballad'>Ballad (Pop)</option>
+                <option value='Ballroom'>Ballroom (Electronic)</option>
+                <option value='Baltimore Club'>Baltimore Club (Electronic)</option>
+                <option value='Bangladeshi Classical'>Bangladeshi Classical (Folk, World & Country)</option>
+                <option value='Barbershop'>Barbershop (Pop)</option>
+                <option value='Baroque'>Baroque (Classical)</option>
+                <option value='Basque Music'>Basque Music (Folk, World & Country)</option>
+                <option value='Bass Music'>Bass Music (Hip Hop)</option>
+                <option value='Bassline'>Bassline (Electronic)</option>
+                <option value='Batucada'>Batucada (Latin)</option>
+                <option value='Bayou Funk'>Bayou Funk (Funk/Soul)</option>
+                <option value='Beat'>Beat (Rock)</option>
+                <option value='Beatbox'>Beatbox (Hip Hop)</option>
+                <option value='Beatdown'>Beatdown (Electronic)</option>
+                <option value='Beguine'>Beguine (Latin)</option>
+                <option value='Bengali Music'>Bengali Music (Folk, World & Country)</option>
+                <option value='Berlin-School'>Berlin-School (Electronic)</option>
+                <option value='Bhangra'>Bhangra (Folk, World & Country)</option>
+                <option value='Big Band'>Big Band (Jazz)</option>
+                <option value='Big Beat'>Big Beat (Electronic)</option>
+                <option value='Black Metal'>Black Metal (Rock)</option>
+                <option value='Bluegrass'>Bluegrass (Folk, World & Country)</option>
+                <option value='Blues Rock'>Blues Rock (Rock)</option>
+                <option value='Bolero'>Bolero (Latin)</option>
+                <option value='Bollywood'>Bollywood (Pop)</option>
+                <option value='Bomba'>Bomba (Latin)</option>
+                <option value='Bongo Flava'>Bongo Flava (Hip Hop)</option>
+                <option value='Boogaloo'>Boogaloo (Latin)</option>
+                <option value='Boogie'>Boogie (Funk/Soul)</option>
+                <option value='Boogie Woogie'>Boogie Woogie (Blues)</option>
+                <option value='Boom Bap'>Boom Bap (Hip Hop)</option>
+                <option value='Bop'>Bop (Jazz)</option>
+                <option value='Bossa Nova'>Bossa Nova (Jazz)</option>
+                <option value='Bossanova'>Bossanova (Latin)</option>
+                <option value='Bounce'>Bounce (Hip Hop)</option>
+                <option value='Brass Band'>Brass Band (Brass & Military)</option>
+                <option value='Break-In'>Break-In (Pop)</option>
+                <option value='Breakbeat'>Breakbeat (Electronic)</option>
+                <option value='Breakcore'>Breakcore (Electronic)</option>
+                <option value='Breaks'>Breaks (Electronic)</option>
+                <option value='Brit Pop'>Brit Pop (Rock)</option>
+                <option value='Britcore'>Britcore (Hip Hop)</option>
+                <option value='Broken Beat'>Broken Beat (Electronic)</option>
+                <option value='Bubblegum'>Bubblegum (Pop)</option>
+                <option value='Bubbling'>Bubbling (Reggae)</option>
+                <option value='Cajun'>Cajun (Folk, World & Country)</option>
+                <option value='Calypso'>Calypso (Reggae)</option>
+                <option value='Cambodian Classical'>Cambodian Classical (Folk, World & Country)</option>
+                <option value='Candombe'>Candombe (Latin)</option>
+                <option value='Canzone Napoletana'>Canzone Napoletana (Folk, World & Country)</option>
+                <option value='Cape Jazz'>Cape Jazz (Jazz)</option>
+                <option value='Carimbó'>Carimbó (Latin)</option>
+                <option value='Carnatic'>Carnatic (Folk, World & Country)</option>
+                <option value='Catalan Music'>Catalan Music (Folk, World & Country)</option>
+                <option value='Celtic'>Celtic (Folk, World & Country)</option>
+                <option value='Cha-Cha'>Cha-Cha (Latin)</option>
+                <option value='Chacarera'>Chacarera (Folk, World & Country)</option>
+                <option value='Chamamé'>Chamamé (Folk, World & Country)</option>
+                <option value='Champeta'>Champeta (Latin)</option>
+                <option value='Chanson'>Chanson (Pop)</option>
+                <option value='Charanga'>Charanga (Latin)</option>
+                <option value='Chicago Blues'>Chicago Blues (Blues)</option>
+                <option value='Chillwave'>Chillwave (Electronic)</option>
+                <option value='Chinese Classical'>Chinese Classical (Folk, World & Country)</option>
+                <option value='Chiptune'>Chiptune (Electronic)</option>
+                <option value='Choral'>Choral (Classical)</option>
+                <option value='Choro'>Choro (Latin)</option>
+                <option value='Chutney'>Chutney (Folk, World & Country)</option>
+                <option value='Classic Rock'>Classic Rock (Rock)</option>
+                <option value='Classical'>Classical (Classical)</option>
+                <option value='Cloud Rap'>Cloud Rap (Hip Hop)</option>
+                <option value='Cobla'>Cobla (Folk, World & Country)</option>
+                <option value='Coldwave'>Coldwave (Rock)</option>
+                <option value='Comedy'>Comedy (Non-Music)</option>
+                <option value='Compas'>Compas (Latin)</option>
+                <option value='Conjunto'>Conjunto (Latin)</option>
+                <option value='Conscious'>Conscious (Hip Hop)</option>
+                <option value='Contemporary'>Contemporary (Classical)</option>
+                <option value='Contemporary Jazz'>Contemporary Jazz (Jazz)</option>
+                <option value='Contemporary R&B'>Contemporary R&B (Funk/Soul)</option>
+                <option value='Cool Jazz'>Cool Jazz (Jazz)</option>
+                <option value='Copla'>Copla (Folk, World & Country)</option>
+                <option value='Corrido'>Corrido (Latin)</option>
+                <option value='Country'>Country (Folk, World & Country)</option>
+                <option value='Country Blues'>Country Blues (Blues)</option>
+                <option value='Country Rock'>Country Rock (Rock)</option>
+                <option value='Crunk'>Crunk (Hip Hop)</option>
+                <option value='Crust'>Crust (Rock)</option>
+                <option value='Cuatro'>Cuatro (Latin)</option>
+                <option value='Cubano'>Cubano (Latin)</option>
+                <option value='Cumbia'>Cumbia (Latin)</option>
+                <option value='Cut-up/DJ'>Cut-up/DJ (Hip Hop)</option>
+                <option value='Dance-pop'>Dance-pop (Electronic)</option>
+                <option value='Dancehall'>Dancehall (Reggae)</option>
+                <option value='Dangdut'>Dangdut (Folk, World & Country)</option>
+                <option value='Danzon'>Danzon (Latin)</option>
+                <option value='Dark Ambient'>Dark Ambient (Electronic)</option>
+                <option value='Darkwave'>Darkwave (Electronic)</option>
+                <option value='Death Metal'>Death Metal (Rock)</option>
+                <option value='Deathcore'>Deathcore (Rock)</option>
+                <option value='Deathrock'>Deathrock (Rock)</option>
+                <option value='Deep House'>Deep House (Electronic)</option>
+                <option value='Deep Techno'>Deep Techno (Electronic)</option>
+                <option value='Delta Blues'>Delta Blues (Blues)</option>
+                <option value='Depressive Black Metal'>Depressive Black Metal (Rock)</option>
+                <option value='Descarga'>Descarga (Latin)</option>
+                <option value='Dialogue'>Dialogue (Non-Music)</option>
+                <option value='Disco'>Disco (Electronic)</option>
+                <option value='Disco'>Disco (Funk/Soul)</option>
+                <option value='Disco Polo'>Disco Polo (Electronic)</option>
+                <option value='Dixieland'>Dixieland (Jazz)</option>
+                <option value='DJ Battle Tool'>DJ Battle Tool (Hip Hop)</option>
+                <option value='Donk'>Donk (Electronic)</option>
+                <option value='Doo Wop'>Doo Wop (Rock)</option>
+                <option value='Doom Metal'>Doom Metal (Rock)</option>
+                <option value='Doomcore'>Doomcore (Electronic)</option>
+                <option value='Downtempo'>Downtempo (Electronic)</option>
+                <option value='Dream Pop'>Dream Pop (Rock)</option>
+                <option value='Drone'>Drone (Electronic)</option>
+                <option value='Drum n Bass'>Drum n Bass (Electronic)</option>
+                <option value='Dub'>Dub (Electronic)</option>
+                <option value='Dub'>Dub (Reggae)</option>
+                <option value='Dub Poetry'>Dub Poetry (Reggae)</option>
+                <option value='Dub Techno'>Dub Techno (Electronic)</option>
+                <option value='Dubstep'>Dubstep (Electronic)</option>
+                <option value='Dungeon Synth'>Dungeon Synth (Electronic)</option>
+                <option value='Early'>Early (Classical)</option>
+                <option value='East Coast Blues'>East Coast Blues (Blues)</option>
+                <option value='Easy Listening'>Easy Listening (Jazz)</option>
+                <option value='EBM'>EBM (Electronic)</option>
+                <option value='Education'>Education (Non-Music)</option>
+                <option value='Educational'>Educational (Children’s)</option>
+                <option value='Electric Blues'>Electric Blues (Blues)</option>
+                <option value='Electro'>Electro (Electronic)</option>
+                <option value='Electro'>Electro (Hip Hop)</option>
+                <option value='Electro House'>Electro House (Electronic)</option>
+                <option value='Electroclash'>Electroclash (Electronic)</option>
+                <option value='Emo'>Emo (Rock)</option>
+                <option value='Enka'>Enka (Pop)</option>
+                <option value='Éntekhno'>Éntekhno (Folk, World & Country)</option>
+                <option value='Ethereal'>Ethereal (Rock)</option>
+                <option value='Ethno-pop'>Ethno-pop (Pop)</option>
+                <option value='Euro House'>Euro House (Electronic)</option>
+                <option value='Euro-Disco'>Euro-Disco (Electronic)</option>
+                <option value='Eurobeat'>Eurobeat (Electronic)</option>
+                <option value='Eurodance'>Eurodance (Electronic)</option>
+                <option value='Europop'>Europop (Pop)</option>
+                <option value='Experimental'>Experimental (Electronic)</option>
+                <option value='Experimental'>Experimental (Rock)</option>
+                <option value='Fado'>Fado (Folk, World & Country)</option>
+                <option value='Favela Funk'>Favela Funk (Hip Hop)</option>
+                <option value='Field Recording'>Field Recording (Non-Music)</option>
+                <option value='Filk'>Filk (Folk, World & Country)</option>
+                <option value='Flamenco'>Flamenco (Folk, World & Country)</option>
+                <option value='Folk'>Folk (Folk, World & Country)</option>
+                <option value='Folk Metal'>Folk Metal (Rock)</option>
+                <option value='Folk Rock'>Folk Rock (Rock)</option>
+                <option value='Forró'>Forró (Latin)</option>
+                <option value='Free Funk'>Free Funk (Funk/Soul)</option>
+                <option value='Free Improvisation'>Free Improvisation (Jazz)</option>
+                <option value='Free Jazz'>Free Jazz (Jazz)</option>
+                <option value='Freestyle'>Freestyle (Electronic)</option>
+                <option value='Funaná'>Funaná (Folk, World & Country)</option>
+                <option value='Funeral Doom Metal'>Funeral Doom Metal (Rock)</option>
+                <option value='Funk'>Funk (Funk/Soul)</option>
+                <option value='Funk Metal'>Funk Metal (Rock)</option>
+                <option value='Funkot'>Funkot (Electronic)</option>
+                <option value='Fusion'>Fusion (Jazz)</option>
+                <option value='Future Jazz'>Future Jazz (Electronic)</option>
+                <option value='G-Funk'>G-Funk (Hip Hop)</option>
+                <option value='Gabber'>Gabber (Electronic)</option>
+                <option value='Gagaku'>Gagaku (Folk, World & Country)</option>
+                <option value='Gaita'>Gaita (Latin)</option>
+                <option value='Gamelan'>Gamelan (Folk, World & Country)</option>
+                <option value='Gangsta'>Gangsta (Hip Hop)</option>
+                <option value='Garage House'>Garage House (Electronic)</option>
+                <option value='Garage Rock'>Garage Rock (Rock)</option>
+                <option value='Ghetto'>Ghetto (Electronic)</option>
+                <option value='Ghetto House'>Ghetto House (Electronic)</option>
+                <option value='Ghettotech'>Ghettotech (Electronic)</option>
+                <option value='Glam'>Glam (Rock)</option>
+                <option value='Glitch'>Glitch (Electronic)</option>
+                <option value='Go-Go'>Go-Go (Hip Hop)</option>
+                <option value='Goa Trance'>Goa Trance (Electronic)</option>
+                <option value='Gogo'>Gogo (Funk/Soul)</option>
+                <option value='Goregrind'>Goregrind (Rock)</option>
+                <option value='Gospel'>Gospel (Folk, World & Country)</option>
+                <option value='Gospel'>Gospel (Funk/Soul)</option>
+                <option value='Goth Rock'>Goth Rock (Rock)</option>
+                <option value='Gothic Metal'>Gothic Metal (Rock)</option>
+                <option value='Grime'>Grime (Electronic)</option>
+                <option value='Grime'>Grime (Hip Hop)</option>
+                <option value='Grindcore'>Grindcore (Rock)</option>
+                <option value='Griot'>Griot (Folk, World & Country)</option>
+                <option value='Grunge'>Grunge (Rock)</option>
+                <option value='Guaguancó'>Guaguancó (Latin)</option>
+                <option value='Guajira'>Guajira (Latin)</option>
+                <option value='Guaracha'>Guaracha (Latin)</option>
+                <option value='Guarania'>Guarania (Folk, World & Country)</option>
+                <option value='Gypsy Jazz'>Gypsy Jazz (Jazz)</option>
+                <option value='Hands Up'>Hands Up (Electronic)</option>
+                <option value='Happy Hardcore'>Happy Hardcore (Electronic)</option>
+                <option value='Hard Beat'>Hard Beat (Electronic)</option>
+                <option value='Hard Bop'>Hard Bop (Jazz)</option>
+                <option value='Hard House'>Hard House (Electronic)</option>
+                <option value='Hard Rock'>Hard Rock (Rock)</option>
+                <option value='Hard Techno'>Hard Techno (Electronic)</option>
+                <option value='Hard Trance'>Hard Trance (Electronic)</option>
+                <option value='Hardcore'>Hardcore (Electronic)</option>
+                <option value='Hardcore'>Hardcore (Rock)</option>
+                <option value='Hardcore Hip-Hop'>Hardcore Hip-Hop (Hip Hop)</option>
+                <option value='Hardstyle'>Hardstyle (Electronic)</option>
+                <option value='Harmonica Blues'>Harmonica Blues (Blues)</option>
+                <option value='Harsh Noise Wall'>Harsh Noise Wall (Electronic)</option>
+                <option value='Hawaiian'>Hawaiian (Folk, World & Country)</option>
+                <option value='Health-Fitness'>Health-Fitness (Non-Music)</option>
+                <option value='Heavy Metal'>Heavy Metal (Rock)</option>
+                <option value='Hi NRG'>Hi NRG (Electronic)</option>
+                <option value='Highlife'>Highlife (Folk, World & Country)</option>
+                <option value='Hillbilly'>Hillbilly (Folk, World & Country)</option>
+                <option value='Hindustani'>Hindustani (Folk, World & Country)</option>
+                <option value='Hip Hop'>Hip Hop (Electronic)</option>
+                <option value='Hip-House'>Hip-House (Electronic)</option>
+                <option value='Hiplife'>Hiplife (Hip Hop)</option>
+                <option value='Honky Tonk'>Honky Tonk (Folk, World & Country)</option>
+                <option value='Horror Rock'>Horror Rock (Rock)</option>
+                <option value='Horrorcore'>Horrorcore (Hip Hop)</option>
+                <option value='House'>House (Electronic)</option>
+                <option value='Hyphy'>Hyphy (Hip Hop)</option>
+                <option value='IDM'>IDM (Electronic)</option>
+                <option value='Illbient'>Illbient (Electronic)</option>
+                <option value='Impressionist'>Impressionist (Classical)</option>
+                <option value='Indian Classical'>Indian Classical (Folk, World & Country)</option>
+                <option value='Indie Pop'>Indie Pop (Pop)</option>
+                <option value='Indie Rock'>Indie Rock (Rock)</option>
+                <option value='Industrial'>Industrial (Electronic)</option>
+                <option value='Industrial'>Industrial (Rock)</option>
+                <option value='Instrumental'>Instrumental (Hip Hop)</option>
+                <option value='Interview'>Interview (Non-Music)</option>
+                <option value='Italo House'>Italo House (Electronic)</option>
+                <option value='Italo-Disco'>Italo-Disco (Electronic)</option>
+                <option value='Italodance'>Italodance (Electronic)</option>
+                <option value='J-Core'>J-Core (Electronic)</option>
+                <option value='J-pop'>J-pop (Pop)</option>
+                <option value='Jazz-Funk'>Jazz-Funk (Jazz)</option>
+                <option value='Jazz-Rock'>Jazz-Rock (Jazz)</option>
+                <option value='Jazzdance'>Jazzdance (Electronic)</option>
+                <option value='Jazzy Hip-Hop'>Jazzy Hip-Hop (Hip Hop)</option>
+                <option value='Jibaro'>Jibaro (Latin)</option>
+                <option value='Joropo'>Joropo (Latin)</option>
+                <option value='Jota'>Jota (Folk, World & Country)</option>
+                <option value='Juke'>Juke (Electronic)</option>
+                <option value='Jump Blues'>Jump Blues (Blues)</option>
+                <option value='Jumpstyle'>Jumpstyle (Electronic)</option>
+                <option value='Jungle'>Jungle (Electronic)</option>
+                <option value='Junkanoo'>Junkanoo (Reggae)</option>
+                <option value='K-pop'>K-pop (Pop)</option>
+                <option value='Karaoke'>Karaoke (Pop)</option>
+                <option value='Kaseko'>Kaseko (Folk, World & Country)</option>
+                <option value='Kayōkyoku'>Kayōkyoku (Pop)</option>
+                <option value='Keroncong'>Keroncong (Folk, World & Country)</option>
+                <option value='Kizomba'>Kizomba (Folk, World & Country)</option>
+                <option value='Klasik'>Klasik (Folk, World & Country)</option>
+                <option value='Klezmer'>Klezmer (Folk, World & Country)</option>
+                <option value='Korean Court Music'>Korean Court Music (Folk, World & Country)</option>
+                <option value='Krautrock'>Krautrock (Rock)</option>
+                <option value='Kwaito'>Kwaito (Hip Hop)</option>
+                <option value='Laïkó'>Laïkó (Folk, World & Country)</option>
+                <option value='Lambada'>Lambada (Latin)</option>
+                <option value='Lao Music'>Lao Music (Folk, World & Country)</option>
+                <option value='Latin'>Latin (Electronic)</option>
+                <option value='Latin Jazz'>Latin Jazz (Jazz)</option>
+                <option value='Leftfield'>Leftfield (Electronic)</option>
+                <option value='Lento Violento'>Lento Violento (Electronic)</option>
+                <option value='Levenslied'>Levenslied (Pop)</option>
+                <option value='Light Music'>Light Music (Pop)</option>
+                <option value='Liscio'>Liscio (Folk, World & Country)</option>
+                <option value='Lo-Fi'>Lo-Fi (Rock)</option>
+                <option value='Louisiana Blues'>Louisiana Blues (Blues)</option>
+                <option value='Lounge'>Lounge (Rock)</option>
+                <option value='Lovers Rock'>Lovers Rock (Reggae)</option>
+                <option value='Luk Krung'>Luk Krung (Folk, World & Country)</option>
+                <option value='Luk Thung'>Luk Thung (Folk, World & Country)</option>
+                <option value='Makina'>Makina (Electronic)</option>
+                <option value='Maloya'>Maloya (Folk, World & Country)</option>
+                <option value='Mambo'>Mambo (Latin)</option>
+                <option value='Marcha Carnavalesca'>Marcha Carnavalesca (Latin)</option>
+                <option value='Marches'>Marches (Brass & Military)</option>
+                <option value='Mariachi'>Mariachi (Latin)</option>
+                <option value='Marimba'>Marimba (Latin)</option>
+                <option value='Math Rock'>Math Rock (Rock)</option>
+                <option value='Mbalax'>Mbalax (Folk, World & Country)</option>
+                <option value='Medieval'>Medieval (Classical)</option>
+                <option value='Melodic Death Metal'>Melodic Death Metal (Rock)</option>
+                <option value='Melodic Hardcore'>Melodic Hardcore (Rock)</option>
+                <option value='Memphis Blues'>Memphis Blues (Blues)</option>
+                <option value='Mento'>Mento (Reggae)</option>
+                <option value='Merengue'>Merengue (Latin)</option>
+                <option value='Metalcore'>Metalcore (Rock)</option>
+                <option value='Miami Bass'>Miami Bass (Hip Hop)</option>
+                <option value='Military'>Military (Brass & Military)</option>
+                <option value='Min’yō'>Min’yō (Folk, World & Country)</option>
+                <option value='Minimal'>Minimal (Electronic)</option>
+                <option value='Minimal Techno'>Minimal Techno (Electronic)</option>
+                <option value='Minneapolis Sound'>Minneapolis Sound (Funk/Soul)</option>
+                <option value='Mizrahi'>Mizrahi (Folk, World & Country)</option>
+                <option value='Mod'>Mod (Rock)</option>
+                <option value='Modal'>Modal (Jazz)</option>
+                <option value='Modern'>Modern (Classical)</option>
+                <option value='Modern Classical'>Modern Classical (Electronic)</option>
+                <option value='Modern Electric Blues'>Modern Electric Blues (Blues)</option>
+                <option value='Monolog'>Monolog (Non-Music)</option>
+                <option value='Motswako'>Motswako (Hip Hop)</option>
+                <option value='Mouth Music'>Mouth Music (Folk, World & Country)</option>
+                <option value='Movie Effects'>Movie Effects (Non-Music)</option>
+                <option value='MPB'>MPB (Latin)</option>
+                <option value='Mugham'>Mugham (Folk, World & Country)</option>
+                <option value='Musette'>Musette (Latin)</option>
+                <option value='Music Hall'>Music Hall (Pop)</option>
+                <option value='Música Criolla'>Música Criolla (Latin)</option>
+                <option value='Musical'>Musical (Stage & Screen)</option>
+                <option value='Musique Concrète'>Musique Concrète (Electronic)</option>
+                <option value='NDW'>NDW (Rock)</option>
+                <option value='Néo Kyma'>Néo Kyma (Pop)</option>
+                <option value='Neo Soul'>Neo Soul (Funk/Soul)</option>
+                <option value='Neo Trance'>Neo Trance (Electronic)</option>
+                <option value='Neo-Classical'>Neo-Classical (Classical)</option>
+                <option value='Neo-Romantic'>Neo-Romantic (Classical)</option>
+                <option value='Neofolk'>Neofolk (Electronic)</option>
+                <option value='Neofolk'>Neofolk (Rock)</option>
+                <option value='Népzene'>Népzene (Folk, World & Country)</option>
+                <option value='Nerdcore Techno'>Nerdcore Techno (Electronic)</option>
+                <option value='New Age' selected>New Age (Electronic)</option>
+                <option value='New Beat'>New Beat (Electronic)</option>
+                <option value='New Jack Swing'>New Jack Swing (Funk/Soul)</option>
+                <option value='New Wave'>New Wave (Electronic)</option>
+                <option value='New Wave'>New Wave (Rock)</option>
+                <option value='No Wave'>No Wave (Rock)</option>
+                <option value='Noise'>Noise (Electronic)</option>
+                <option value='Noise'>Noise (Rock)</option>
+                <option value='Noisecore'>Noisecore (Rock)</option>
+                <option value='Nordic'>Nordic (Folk, World & Country)</option>
+                <option value='Norteño'>Norteño (Latin)</option>
+                <option value='Novelty'>Novelty (Pop)</option>
+                <option value='Nu Metal'>Nu Metal (Rock)</option>
+                <option value='Nu-Disco'>Nu-Disco (Electronic)</option>
+                <option value='Nueva Cancion'>Nueva Cancion (Latin)</option>
+                <option value='Nueva Trova'>Nueva Trova (Latin)</option>
+                <option value='Nursery Rhymes'>Nursery Rhymes (Children’s)</option>
+                <option value='Occitan'>Occitan (Latin)</option>
+                <option value='Oi'>Oi (Rock)</option>
+                <option value='Opera'>Opera (Classical)</option>
+                <option value='Operetta'>Operetta (Classical)</option>
+                <option value='Oratorio'>Oratorio (Classical)</option>
+                <option value='Ottoman Classical'>Ottoman Classical (Folk, World & Country)</option>
+                <option value='Overtone Singing'>Overtone Singing (Folk, World & Country)</option>
+                <option value='P.Funk'>P.Funk (Funk/Soul)</option>
+                <option value='Pachanga'>Pachanga (Latin)</option>
+                <option value='Pacific'>Pacific (Folk, World & Country)</option>
+                <option value='Parody'>Parody (Pop)</option>
+                <option value='Parody'>Parody (Rock)</option>
+                <option value='Pasodoble'>Pasodoble (Folk, World & Country)</option>
+                <option value='Persian Classical'>Persian Classical (Folk, World & Country)</option>
+                <option value='Philippine Classical'>Philippine Classical (Folk, World & Country)</option>
+                <option value='Phleng Phuea Chiwit'>Phleng Phuea Chiwit (Folk, World & Country)</option>
+                <option value='Piano Blues'>Piano Blues (Blues)</option>
+                <option value='Piedmont Blues'>Piedmont Blues (Blues)</option>
+                <option value='Piobaireachd'>Piobaireachd (Folk, World & Country)</option>
+                <option value='Pipe & Drum'>Pipe & Drum (Brass & Military)</option>
+                <option value='Plena'>Plena (Latin)</option>
+                <option value='Poetry'>Poetry (Non-Music)</option>
+                <option value='Political'>Political (Non-Music)</option>
+                <option value='Polka'>Polka (Folk, World & Country)</option>
+                <option value='Pop Punk'>Pop Punk (Rock)</option>
+                <option value='Pop Rap'>Pop Rap (Hip Hop)</option>
+                <option value='Pop Rock'>Pop Rock (Rock)</option>
+                <option value='Pornogrind'>Pornogrind (Rock)</option>
+                <option value='Porro'>Porro (Latin)</option>
+                <option value='Post Bop'>Post Bop (Jazz)</option>
+                <option value='Post Rock'>Post Rock (Rock)</option>
+                <option value='Post-Hardcore'>Post-Hardcore (Rock)</option>
+                <option value='Post-Metal'>Post-Metal (Rock)</option>
+                <option value='Post-Modern'>Post-Modern (Classical)</option>
+                <option value='Post-Punk'>Post-Punk (Rock)</option>
+                <option value='Power Electronics'>Power Electronics (Electronic)</option>
+                <option value='Power Metal'>Power Metal (Rock)</option>
+                <option value='Power Pop'>Power Pop (Rock)</option>
+                <option value='Power Violence'>Power Violence (Rock)</option>
+                <option value='Prog Rock'>Prog Rock (Rock)</option>
+                <option value='Progressive Bluegrass'>Progressive Bluegrass (Folk, World & Country)</option>
+                <option value='Progressive Breaks'>Progressive Breaks (Electronic)</option>
+                <option value='Progressive House'>Progressive House (Electronic)</option>
+                <option value='Progressive Metal'>Progressive Metal (Rock)</option>
+                <option value='Progressive Trance'>Progressive Trance (Electronic)</option>
+                <option value='Promotional'>Promotional (Non-Music)</option>
+                <option value='Psy-Trance'>Psy-Trance (Electronic)</option>
+                <option value='Psychedelic'>Psychedelic (Funk/Soul)</option>
+                <option value='Psychedelic Rock'>Psychedelic Rock (Rock)</option>
+                <option value='Psychobilly'>Psychobilly (Rock)</option>
+                <option value='Pub Rock'>Pub Rock (Rock)</option>
+                <option value='Public Broadcast'>Public Broadcast (Non-Music)</option>
+                <option value='Public Service Announcement'>Public Service Announcement (Non-Music)</option>
+                <option value='Punk'>Punk (Rock)</option>
+                <option value='Quechua'>Quechua (Latin)</option>
+                <option value='Radioplay'>Radioplay (Non-Music)</option>
+                <option value='Ragga'>Ragga (Reggae)</option>
+                <option value='Ragga HipHop'>Ragga HipHop (Hip Hop)</option>
+                <option value='Ragtime'>Ragtime (Jazz)</option>
+                <option value='Raï'>Raï (Folk, World & Country)</option>
+                <option value='Ranchera'>Ranchera (Latin)</option>
+                <option value='Rapso'>Rapso (Reggae)</option>
+                <option value='Rebetiko'>Rebetiko (Folk, World & Country)</option>
+                <option value='Reggae'>Reggae (Reggae)</option>
+                <option value='Reggae Gospel'>Reggae Gospel (Reggae)</option>
+                <option value='Reggae-Pop'>Reggae-Pop (Reggae)</option>
+                <option value='Reggaeton'>Reggaeton (Latin)</option>
+                <option value='Religious'>Religious (Non-Music)</option>
+                <option value='Renaissance'>Renaissance (Classical)</option>
+                <option value='Rhythm & Blues'>Rhythm & Blues (Blues)</option>
+                <option value='Rhythm & Blues'>Rhythm & Blues (Funk/Soul)</option>
+                <option value='Rhythmic Noise'>Rhythmic Noise (Electronic)</option>
+                <option value='RnB/Swing'>RnB/Swing (Hip Hop)</option>
+                <option value='Rock & Roll'>Rock & Roll (Rock)</option>
+                <option value='Rock Opera'>Rock Opera (Rock)</option>
+                <option value='Rockabilly'>Rockabilly (Rock)</option>
+                <option value='Rocksteady'>Rocksteady (Reggae)</option>
+                <option value='Romani'>Romani (Folk, World & Country)</option>
+                <option value='Romantic'>Romantic (Classical)</option>
+                <option value='Roots Reggae'>Roots Reggae (Reggae)</option>
+                <option value='Rumba'>Rumba (Latin)</option>
+                <option value='Rune Singing'>Rune Singing (Folk, World & Country)</option>
+                <option value='Salegy'>Salegy (Folk, World & Country)</option>
+                <option value='Salsa'>Salsa (Latin)</option>
+                <option value='Samba'>Samba (Latin)</option>
+                <option value='Samba-Canção'>Samba-Canção (Latin)</option>
+                <option value='Sámi Music'>Sámi Music (Folk, World & Country)</option>
+                <option value='Schlager'>Schlager (Pop)</option>
+                <option value='Schranz'>Schranz (Electronic)</option>
+                <option value='Score'>Score (Stage & Screen)</option>
+                <option value='Screw'>Screw (Hip Hop)</option>
+                <option value='Sea Shanties'>Sea Shanties (Folk, World & Country)</option>
+                <option value='Séga'>Séga (Folk, World & Country)</option>
+                <option value='Sephardic'>Sephardic (Folk, World & Country)</option>
+                <option value='Seresta'>Seresta (Latin)</option>
+                <option value='Serial'>Serial (Classical)</option>
+                <option value='Sermon'>Sermon (Non-Music)</option>
+                <option value='Shoegaze'>Shoegaze (Rock)</option>
+                <option value='Ska'>Ska (Reggae)</option>
+                <option value='Ska'>Ska (Rock)</option>
+                <option value='Skiffle'>Skiffle (Rock)</option>
+                <option value='Skweee'>Skweee (Electronic)</option>
+                <option value='Sludge Metal'>Sludge Metal (Rock)</option>
+                <option value='Smooth Jazz'>Smooth Jazz (Jazz)</option>
+                <option value='Soca'>Soca (Reggae)</option>
+                <option value='Soft Rock'>Soft Rock (Rock)</option>
+                <option value='Son'>Son (Latin)</option>
+                <option value='Son Montuno'>Son Montuno (Latin)</option>
+                <option value='Sonero'>Sonero (Latin)</option>
+                <option value='Soukous'>Soukous (Folk, World & Country)</option>
+                <option value='Soul'>Soul (Funk/Soul)</option>
+                <option value='Soul-Jazz'>Soul-Jazz (Jazz)</option>
+                <option value='Sound Art'>Sound Art (Non-Music)</option>
+                <option value='Sound Collage'>Sound Collage (Electronic)</option>
+                <option value='Sound Poetry'>Sound Poetry (Non-Music)</option>
+                <option value='Soundtrack'>Soundtrack (Stage & Screen)</option>
+                <option value='Southern Rock'>Southern Rock (Rock)</option>
+                <option value='Space Rock'>Space Rock (Rock)</option>
+                <option value='Space-Age'>Space-Age (Jazz)</option>
+                <option value='Spaza'>Spaza (Hip Hop)</option>
+                <option value='Special Effects'>Special Effects (Non-Music)</option>
+                <option value='Speech'>Speech (Non-Music)</option>
+                <option value='Speed Garage'>Speed Garage (Electronic)</option>
+                <option value='Speed Metal'>Speed Metal (Rock)</option>
+                <option value='Speedcore'>Speedcore (Electronic)</option>
+                <option value='Spoken Word'>Spoken Word (Non-Music)</option>
+                <option value='Steel Band'>Steel Band (Reggae)</option>
+                <option value='Stoner Rock'>Stoner Rock (Rock)</option>
+                <option value='Story'>Story (Children’s)</option>
+                <option value='Surf'>Surf (Rock)</option>
+                <option value='Swamp Pop'>Swamp Pop (Rock)</option>
+                <option value='Swing'>Swing (Jazz)</option>
+                <option value='Swingbeat'>Swingbeat (Funk/Soul)</option>
+                <option value='Symphonic Rock'>Symphonic Rock (Rock)</option>
+                <option value='Synth-pop'>Synth-pop (Electronic)</option>
+                <option value='Synthwave'>Synthwave (Electronic)</option>
+                <option value='Tango'>Tango (Latin)</option>
+                <option value='Tech House'>Tech House (Electronic)</option>
+                <option value='Tech Trance'>Tech Trance (Electronic)</option>
+                <option value='Technical'>Technical (Non-Music)</option>
+                <option value='Technical Death Metal'>Technical Death Metal (Rock)</option>
+                <option value='Techno'>Techno (Electronic)</option>
+                <option value='Tejano'>Tejano (Latin)</option>
+                <option value='Texas Blues'>Texas Blues (Blues)</option>
+                <option value='Thai Classical'>Thai Classical (Folk, World & Country)</option>
+                <option value='Theme'>Theme (Stage & Screen)</option>
+                <option value='Therapy'>Therapy (Non-Music)</option>
+                <option value='Thrash'>Thrash (Rock)</option>
+                <option value='Thug Rap'>Thug Rap (Hip Hop)</option>
+                <option value='Timba'>Timba (Latin)</option>
+                <option value='Trance'>Trance (Electronic)</option>
+                <option value='Trap'>Trap (Hip Hop)</option>
+                <option value='Tribal'>Tribal (Electronic)</option>
+                <option value='Tribal House'>Tribal House (Electronic)</option>
+                <option value='Trip Hop'>Trip Hop (Electronic)</option>
+                <option value='Trip Hop'>Trip Hop (Hip Hop)</option>
+                <option value='Tropical House'>Tropical House (Electronic)</option>
+                <option value='Trova'>Trova (Latin)</option>
+                <option value='Turntablism'>Turntablism (Hip Hop)</option>
+                <option value='Twelve-tone'>Twelve-tone (Classical)</option>
+                <option value='Twist'>Twist (Rock)</option>
+                <option value='UK Funky'>UK Funky (Electronic)</option>
+                <option value='UK Garage'>UK Garage (Electronic)</option>
+                <option value='UK Street Soul'>UK Street Soul (Funk/Soul)</option>
+                <option value='Vallenato'>Vallenato (Latin)</option>
+                <option value='Vaporwave'>Vaporwave (Electronic)</option>
+                <option value='Viking Metal'>Viking Metal (Rock)</option>
+                <option value='Vocal'>Vocal (Pop)</option>
+                <option value='Volksmusik'>Volksmusik (Folk, World & Country)</option>
+                <option value='Waiata'>Waiata (Folk, World & Country)</option>
+                <option value='Western Swing'>Western Swing (Folk, World & Country)</option>
+                <option value='Witch House'>Witch House (Electronic)</option>
+                <option value='Yé-Yé'>Yé-Yé (Rock)</option>
+                <option value='Yemenite Jewish'>Yemenite Jewish (Folk, World & Country)</option>
+                <option value='Zamba'>Zamba (Folk, World & Country)</option>
+                <option value='Zarzuela'>Zarzuela (Classical)</option>
+                <option value='Zemer Ivri'>Zemer Ivri (Folk, World & Country)</option>
+                <option value='Zouk'>Zouk (Folk, World & Country)</option>
+                <option value='Zydeco'>Zydeco (Folk, World & Country)</option>
+            </select>
+        </span>
+
+        <button class="topBtn" id="randStyle" onClick="randomStyle();" tabindex="0">❉</button>
+
+        <span class="noBreak">
+            Y:<input class="inputYear" id="searchYear" onClick="this.select();" type="number" min="1860" value="1983" tabindex="0">
+            <button class="topBtn" id="yearDec" onClick="changeYear(false)" tabindex="0">-</button>
+            <button class="topBtn" id="yearInc" onClick="changeYear(true)" tabindex="0">+</button>
+        </span>
+
+        <span class="noBreak">
+            #:<input class="inputPage" id="searchPageQ" onClick="this.select();" type="number" min="1" max="100" value="40" tabindex="0"> 
+            <button class="topBtn" id="aboutBtn" onClick="$('#aboutDiv').fadeToggle(80)" tabindex="0">?</button> 
+            <button class="topBtn" id="searchBtn" onClick="executeSearch(true)" tabindex="0">GO➤</button>
+        </span>
+
+        </div>
+    </div>
+
+    <div id="releaseContainer">
+        <div id="releaseWindow">
+            <button class="releaseBtn" id="closeRelease" onClick="$('#releaseContainer').fadeToggle(80)">X</button>
+            <button class="releaseBtn" id="prevRelease" onClick="loadNextRelease(false)">&lt;</button> 
+            <button class="releaseBtn" id="nextRelease" onClick="loadNextRelease(true)">&gt;</button> 
+            <button class="releaseBtn" id="nextLoad" onClick="$('#releaseContainer').fadeToggle(80);loadNextReleasePage();">+</button>
+            
+            <div id="infoDiv"></div>
+            
+        </div>
+    </div>
+
+    <div id="main">
+        <div id="gridDiv">
+            <div id="imageGrid"></div>
+        </div>
+    </div>
+    
+</body>
+</html>
