@@ -1,5 +1,5 @@
 # Minimal Discogs
-A streamlined wesbite for searching with the Discogs.com API.
+A streamlined website for searching with the Discogs.com API.
 
 ## Note: Discogs.com OAuth
 In order to use this, you'll need to enter your Discogs.com user KEY and SECRET in the discogs.js file. (Just do a search for GITHUB). Info about Discogs.com user auth is up here: https://blog.discogs.com/en/api-update-discogs-auth/
